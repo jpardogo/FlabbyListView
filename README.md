@@ -3,6 +3,8 @@ FlabbyListView
 
 Android library to display a ListView which cells are not rigid but flabby and react to ListView scroll.
 
+A video example of this library is on this [youtube video][1].
+
 Developed By
 --------------------
 
@@ -36,3 +38,5 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[1]: https://www.youtube.com/watch?v=TEXskA--Oxw
