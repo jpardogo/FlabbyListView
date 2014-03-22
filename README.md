@@ -25,7 +25,7 @@ Usage
         android:layout_height="match_parent"/>
 ```
 
-2.Populate it with items which xml layout is wrap by a `FlabbyLayout:
+2.Populate it with items which xml layout is wrap by a `FlabbyLayout`:
 
 
 ```xml
@@ -41,7 +41,7 @@ Usage
 
     </FlabbyLayout>
 ```
-3.Set the color of each item. It needs to be set on the `getView` method of your adapter calling 'setFlabbyColor' from `FlabbyLayout`:
+3.Set the color of each item. It needs to be set on the `getView method of your adapter calling 'setFlabbyColor' from `FlabbyLayout`:
 
 ```java
     @Override
