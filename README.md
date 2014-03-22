@@ -23,7 +23,7 @@ Javier Pardo de Santayana Gómez - <jpardogo@gmail.com>
 License
 -----------
 
-    Copyright 2013 Javier Pardo de Santayana GÃ³mez
+    Copyright 2013 Javier Pardo de Santayana Gómez
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
