@@ -2,18 +2,12 @@ package com.jpardogo.android.flabbylistview.lib;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.Random;
 
 public class FlabbyLayout extends FrameLayout {
     private static final float MAX_CURVATURE = 100;
@@ -26,7 +20,6 @@ public class FlabbyLayout extends FrameLayout {
     private int mHeight;
     private int mOneFifthWidth;
     private int mFourFifthWith;
-    private TextView mTextView;
 
     public FlabbyLayout(Context context) {
         super(context);
@@ -48,9 +41,6 @@ public class FlabbyLayout extends FrameLayout {
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
-        mTextView = new TextView(context);
-        mTextView.setGravity(Gravity.CENTER);
-        addView(mTextView);
     }
 
     @Override
@@ -79,7 +69,6 @@ public class FlabbyLayout extends FrameLayout {
     }
 
     public void updateControlPoints(float deltaY) {
-        mTextView.setText("DeltaY: " + deltaY);
         mDeltaY = deltaY;
         invalidate();
     }
