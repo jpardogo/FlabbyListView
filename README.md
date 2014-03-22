@@ -11,6 +11,56 @@ A video example of this library is on this [youtube video][1].
  </a>
 </p>
 
+Usage
+-----
+
+1.Place the `FlabbyListView` on your layout:
+
+```xml
+    <com.jpardogo.android.flabbylistview.lib.FlabbyListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+```
+
+2.Populate it with items which xml layout is wrap by a `FlabbyLayout:
+
+
+```xml
+    <!--Notice that this view extends from <FrameLayout/>.-->
+    <com.jpardogo.android.flabbylistview.lib.FlabbyLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/apk/tools"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+
+        <!--Your content-->
+
+    </FlabbyLayout>
+```
+3.Set the color of each item. It needs to be set on the `getView` method of your adapter calling 'setFlabbyColor' from `FlabbyLayout`:
+
+```java
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        int color = Color.argb(255, mRandomizer.nextInt(256), mRandomizer.nextInt(256), mRandomizer.nextInt(256));
+        ((FlabbyLayout)convertView).setFlabbyColor(color);
+        holder.text.setText(getItem(position));
+        return convertView;
+    }
+```
 
 Developed By
 --------------------
