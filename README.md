@@ -6,7 +6,7 @@ Android library to display a ListView which cells are not rigid but flabby and r
 A video example of this library is on this [youtube video][1].
 
 <p align="center">
-    <img height=500 width=254 src="https://raw.githubusercontent.com/jpardogo/FlabbyListView/dev/art/flabby_gif.gif"/>
+    <img height=393 width=200 src="https://raw.githubusercontent.com/jpardogo/FlabbyListView/master/art/flappy_shot.png"/>
 </p>
 
 Usage
