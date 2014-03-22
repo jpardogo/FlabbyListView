@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-public class ObservableListView extends ListView {
+public class FlabbyListView extends ListView {
 
-    private static final String TAG = ObservableListView.class.getSimpleName();
+    private static final String TAG = FlabbyListView.class.getSimpleName();
     /**
      * Delegate for the callback to the fragment/activity that the ListView is in
      */
@@ -18,17 +18,17 @@ public class ObservableListView extends ListView {
     private int mTrackedChildPrevPosition;
     private int mTrackedChildPrevTop;
 
-    public ObservableListView(Context context) {
+    public FlabbyListView(Context context) {
         super(context);
         init(context);
     }
 
-    public ObservableListView(Context context, AttributeSet attrs) {
+    public FlabbyListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ObservableListView(Context context, AttributeSet attrs, int defStyle) {
+    public FlabbyListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
