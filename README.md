@@ -7,7 +7,7 @@ A video example of this library is on this [youtube video][1].
 
 <p align="center">
  <a href="https://play.google.com/store/apps/details?id=com.jpardogo.android.listbuddies">
-    <img height=500 width=254 src="https://raw.githubusercontent.com/jpardogo/FlabbyListView/dev/art/flappy_shot.png"/>
+    <img height=500 width=254 src="https://raw.githubusercontent.com/jpardogo/FlabbyListView/dev/art/flabby_gif.gif"/>
  </a>
 </p>
 
