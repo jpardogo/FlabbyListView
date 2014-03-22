@@ -6,7 +6,7 @@ Android library to display a ListView which cells are not rigid but flabby and r
 Developed By
 --------------------
 
-Javier Pardo de Santayana GÃ³mez - <jpardogo@gmail.com>
+Javier Pardo de Santayana Gómez - <jpardogo@gmail.com>
 
 <a href="https://twitter.com/jpardogo">
   <img alt="Follow me on Twitter"
