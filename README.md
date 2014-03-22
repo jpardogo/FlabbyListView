@@ -41,7 +41,7 @@ Usage
 
     </FlabbyLayout>
 ```
-3.Set the color of each item. It needs to be set on the `getView method of your adapter calling 'setFlabbyColor' from `FlabbyLayout`:
+3.Set the color of each item. It needs to be set on the getView method of your adapter calling `setFlabbyColor` from `FlabbyLayout`:
 
 ```java
     @Override
