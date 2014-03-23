@@ -55,8 +55,8 @@ public class FlabbyListView extends ListView {
      * Calculate the scroll distance comparing the distance with the top of the list of the current
      * child and the last one tracked
      *
-     * @param l - Current horizontal scroll origin.
-     * @param t - Current vertical scroll origin.
+     * @param l    - Current horizontal scroll origin.
+     * @param t    - Current vertical scroll origin.
      * @param oldl - Previous horizontal scroll origin.
      * @param oldt - Previous vertical scroll origin.
      */
@@ -125,20 +125,20 @@ public class FlabbyListView extends ListView {
     private void actionMove(MotionEvent event) {
         float currentX = event.getX();
         float currentY = event.getY();
-        float OffsetX =mDownXValue - currentX;
-        float OffsetY =mDownYValue-currentY;
+        float OffsetX = mDownXValue - currentX;
+        float OffsetY = mDownYValue - currentY;
         if (Math.abs(OffsetX) > Math.abs(OffsetY)) {
             sendDownViewEvent(event);
             sendBelowDownViewEvent(event);
-        }else if(Math.abs(OffsetY)>100){
-            event=MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0);
+        } else if (Math.abs(OffsetY) > 100) {
+            event = MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0);
             sendDownViewEvent(event);
             sendBelowDownViewEvent(event);
         }
     }
 
     private void sendDownViewEvent(MotionEvent event) {
-        if(mDownView!=null) {
+        if (mDownView != null) {
             mDownView.onTouchEvent(event);
         }
     }
@@ -160,29 +160,12 @@ public class FlabbyListView extends ListView {
             child = (FlabbyLayout) getChildAt(i);
             child.getHitRect(mRect);
             if (mRect.contains(x, y)) {
-//                selectedView=  getChildAt(i);
-//                if(mChildCount<i+1){
-//                    belowSelectedView= getChildAt(i+1);
-//                }
-//
-//                if(selectedView instanceof FlabbyLayout){
-//                    if(selectedView!=null) {
-                        mDownView = child;
-                        mDownView.setAsSelected(true);
-//                    }
-//                }else{
-//                    throw new ClassCastException("The layout of the element for the FlabbyListView should be wrap by a FlabbyLayout");
-//                }
-//
-//                if(belowSelectedView!=null){
-//                    if(belowSelectedView instanceof FlabbyLayout) {
-                        mDownBelowView = (FlabbyLayout) getChildAt(i+1);
-//                        mDownBelowView.setAsBelow();
-//                    }else{
-//                        throw new ClassCastException("The layout of the element for the FlabbyListView should be wrap by a FlabbyLayout");
-//                    }
-//                }
-            }else{
+                mDownView = child;
+                if(mDownView!=null) {
+                    mDownView.setAsSelected(true);
+                }
+                mDownBelowView = (FlabbyLayout) getChildAt(i + 1);
+            } else {
                 child.setAsSelected(false);
             }
         }
