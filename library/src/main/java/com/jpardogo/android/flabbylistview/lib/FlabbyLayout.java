@@ -24,7 +24,6 @@ public class FlabbyLayout extends FrameLayout {
     private int mHeight;
     private int mOneFifthWidth;
     private int mFourFifthWith;
-    private TextView mTextView;
     private boolean isUserTouching = false;
     private float mFingerX = 0;
     private boolean isSelectedView = false;
@@ -49,14 +48,6 @@ public class FlabbyLayout extends FrameLayout {
         mPath = new Path();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (mTextView == null) {
-            mTextView = (TextView) findViewWithTag("Text");
-        }
     }
 
     @Override
