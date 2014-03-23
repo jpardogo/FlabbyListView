@@ -3,7 +3,6 @@ package com.jpardogo.android.flabbylistview.lib;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -13,7 +12,8 @@ public class FlabbyListView extends ListView {
 
     private static final String TAG = FlabbyListView.class.getSimpleName();
     private View mTrackedChild;
-    private View mDownView;
+    private FlabbyLayout mDownView;
+    private FlabbyLayout mDownBelowView;
     private Rect mRect = new Rect();
     private int[] mListViewCoords;
     private int mChildCount;
@@ -97,24 +97,29 @@ public class FlabbyListView extends ListView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "ACTION_DOWN");
-                mDownXValue = ev.getX();
-                mDownYValue = ev.getY();
-                mDownView = findChildTouched(ev);
+                actionDown(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                actionMove(ev);
+                actionMove(event);
 
                 break;
             case MotionEvent.ACTION_UP:
-                sendDownViewEvent(ev);
-                Log.d(TAG, "ACTION_UP");
+                sendDownViewEvent(event);
+                sendBelowDownViewEvent(event);
                 break;
         }
-        return super.onTouchEvent(ev);
+        return super.onTouchEvent(event);
+    }
+
+    private void actionDown(MotionEvent event) {
+        mDownXValue = event.getX();
+        mDownYValue = event.getY();
+        setDownView(event);
+        sendDownViewEvent(event);
+        sendBelowDownViewEvent(event);
     }
 
     private void actionMove(MotionEvent event) {
@@ -122,38 +127,65 @@ public class FlabbyListView extends ListView {
         float currentY = event.getY();
         float OffsetX =mDownXValue - currentX;
         float OffsetY =mDownYValue-currentY;
-        Log.d(TAG, "Offset Y: "+OffsetY);
         if (Math.abs(OffsetX) > Math.abs(OffsetY)) {
             sendDownViewEvent(event);
+            sendBelowDownViewEvent(event);
         }else if(Math.abs(OffsetY)>100){
-            Log.d(TAG, "Offset Y, SUCCESS!!: "+OffsetY);
-            sendDownViewEvent(MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
+            event=MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0);
+            sendDownViewEvent(event);
+            sendBelowDownViewEvent(event);
         }
     }
 
-    private void sendDownViewEvent(MotionEvent ev) {
+    private void sendDownViewEvent(MotionEvent event) {
         if(mDownView!=null) {
-            mDownView.onTouchEvent(ev);
+            mDownView.onTouchEvent(event);
         }
     }
 
-    private View findChildTouched(MotionEvent event) {
-        View downView = null;
+    private void sendBelowDownViewEvent(MotionEvent event) {
+        if (mDownBelowView != null) {
+            mDownBelowView.onTouchEvent(event);
+        }
+    }
+
+    private void setDownView(MotionEvent event) {
         mChildCount = getChildCount();
         mListViewCoords = new int[2];
         getLocationOnScreen(mListViewCoords);
         int x = (int) event.getRawX() - mListViewCoords[0];
         int y = (int) event.getRawY() - mListViewCoords[1];
-        View child;
+        FlabbyLayout child;
         for (int i = 0; i < mChildCount; i++) {
-            child = getChildAt(i);
+            child = (FlabbyLayout) getChildAt(i);
             child.getHitRect(mRect);
             if (mRect.contains(x, y)) {
-                downView=child;
-                return downView;
+//                selectedView=  getChildAt(i);
+//                if(mChildCount<i+1){
+//                    belowSelectedView= getChildAt(i+1);
+//                }
+//
+//                if(selectedView instanceof FlabbyLayout){
+//                    if(selectedView!=null) {
+                        mDownView = child;
+                        mDownView.setAsSelected(true);
+//                    }
+//                }else{
+//                    throw new ClassCastException("The layout of the element for the FlabbyListView should be wrap by a FlabbyLayout");
+//                }
+//
+//                if(belowSelectedView!=null){
+//                    if(belowSelectedView instanceof FlabbyLayout) {
+                        mDownBelowView = (FlabbyLayout) getChildAt(i+1);
+//                        mDownBelowView.setAsBelow();
+//                    }else{
+//                        throw new ClassCastException("The layout of the element for the FlabbyListView should be wrap by a FlabbyLayout");
+//                    }
+//                }
+            }else{
+                child.setAsSelected(false);
             }
         }
-        return downView;
     }
 
     private OnScrollListener mScrollListener = new OnScrollListener() {

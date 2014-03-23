@@ -27,7 +27,7 @@ public class FlabbyLayout extends FrameLayout {
     private TextView mTextView;
     private boolean isUserTouching = false;
     private float mFingerX = 0;
-
+    private boolean isSelectedView = false;
 
     public FlabbyLayout(Context context) {
         super(context);
@@ -66,7 +66,6 @@ public class FlabbyLayout extends FrameLayout {
         mRect = canvas.getClipBounds();
         mRect.inset(0, -mHeight / 2);
         canvas.clipRect(mRect, Region.Op.REPLACE);
-
         float startX1;
         float startX2;
         float finishX1;
@@ -76,25 +75,36 @@ public class FlabbyLayout extends FrameLayout {
             if (mDeltaY > -MAX_CURVATURE && mDeltaY < MAX_CURVATURE) mCurvature = mDeltaY * 2 * -1;
             if (mOneFifthWidth == 0) mOneFifthWidth = mWidth / 5;
             if (mFourFifthWith == 0) mFourFifthWith = mOneFifthWidth * 4;
-            startX1=mOneFifthWidth;
-            startX2=mFourFifthWith;
-            finishX1=mFourFifthWith;
-            finishX2=mOneFifthWidth;
-            curvature=mCurvature;
+            startX1 = mOneFifthWidth;
+            startX2 = mFourFifthWith;
+            finishX1 = mFourFifthWith;
+            finishX2 = mOneFifthWidth;
+            curvature = mCurvature;
         } else {
-            startX1=mFingerX;
-            startX2=mFingerX;
-            finishX1=mFingerX;
-            finishX2=mFingerX;
-            curvature=-mCurvature;
+            startX1 = mFingerX;
+            startX2 = mFingerX;
+            finishX1 = mFingerX;
+            finishX2 = mFingerX;
+            curvature = -mCurvature;
         }
 
-        startFlabberPath(startX1, startX2);
-        finishFlabberPath(finishX1, finishX2, curvature);
+        if (isSelectedView || !isUserTouching) {
+            topCellPath(startX1, startX2, mCurvature);
+            bottomCellPath(finishX1, finishX2, curvature);
+        } else {
+            mPath.reset();
+            mPath.moveTo(0, 0);
+            mPath.cubicTo(mFingerX, mCurvature, mFingerX, mCurvature, mWidth, 0);
+            mPath.lineTo(mWidth, mHeight);
+            mPath.cubicTo(finishX1, mHeight, finishX2, mHeight, 0, mHeight);
+            mPath.lineTo(0, 0);
+        }
+
+
         canvas.drawPath(mPath, mPaint);
     }
 
-    private Path startFlabberPath(float x1, float x2) {
+    private Path topCellPath(float x1, float x2, float curvature) {
         mPath.reset();
         mPath.moveTo(0, 0);
         mPath.cubicTo(x1, -mCurvature, x2, -mCurvature, mWidth, 0);
@@ -102,7 +112,7 @@ public class FlabbyLayout extends FrameLayout {
         return mPath;
     }
 
-    private Path finishFlabberPath(float x1, float x2, float curvature) {
+    private Path bottomCellPath(float x1, float x2, float curvature) {
         mPath.cubicTo(x1, mHeight - curvature, x2, mHeight - curvature, 0, mHeight);
         mPath.lineTo(0, 0);
         return null;
@@ -115,7 +125,7 @@ public class FlabbyLayout extends FrameLayout {
                 actionDown(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-               actionMove(event);
+                actionMove(event);
                 break;
             case MotionEvent.ACTION_UP:
                 actionUp();
@@ -150,5 +160,9 @@ public class FlabbyLayout extends FrameLayout {
 
     public void setFlabbyColor(int color) {
         mPaint.setColor(color);
+    }
+
+    public void setAsSelected(boolean isSelected) {
+        isSelectedView = isSelected;
     }
 }
