@@ -1,7 +1,10 @@
 package com.jpardogo.android.flabbylistview.lib;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -9,14 +12,16 @@ import android.widget.ListView;
 public class FlabbyListView extends ListView {
 
     private static final String TAG = FlabbyListView.class.getSimpleName();
-    /**
-     * Delegate for the callback to the fragment/activity that the ListView is in
-     */
-    private ListViewObserverDelegate mObserver;
-
     private View mTrackedChild;
+    private View mDownView;
+    private Rect mRect = new Rect();
+    private int[] mListViewCoords;
+    private int mChildCount;
     private int mTrackedChildPrevPosition;
     private int mTrackedChildPrevTop;
+    private float OldDeltaY;
+    private float mDownXValue;
+    private float mDownYValue;
 
     public FlabbyListView(Context context) {
         super(context);
@@ -46,10 +51,6 @@ public class FlabbyListView extends ListView {
         return getChildAt(getChildCount() / 2);
     }
 
-    public void setObserver(ListViewObserverDelegate observer) {
-        mObserver = observer;
-    }
-
     /**
      * Calculate the scroll distance comparing the distance with the top of the list of the current
      * child and the last one tracked
@@ -59,17 +60,11 @@ public class FlabbyListView extends ListView {
      * @param oldl - Previous horizontal scroll origin.
      * @param oldt - Previous vertical scroll origin.
      */
-    private float OldDeltaY;
-
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
 
         if (mTrackedChild == null) {
-
-            //We want to continue scrolling the list when we don't find a valid child
-            // so we use the last value of deltaY
-            if (mObserver != null) mObserver.onListScroll(this, OldDeltaY);
 
             if (getChildCount() > 0) {
                 mTrackedChild = getChildInTheMiddle();
@@ -93,9 +88,6 @@ public class FlabbyListView extends ListView {
                 }
 
                 updateChildrenControlPoints(deltaY);
-
-                if (mObserver != null) mObserver.onListScroll(this, deltaY);
-
                 mTrackedChildPrevTop = top;
             } else {
                 mTrackedChild = null;
@@ -104,11 +96,71 @@ public class FlabbyListView extends ListView {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "ACTION_DOWN");
+                mDownXValue = ev.getX();
+                mDownYValue = ev.getY();
+                mDownView = findChildTouched(ev);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                actionMove(ev);
+
+                break;
+            case MotionEvent.ACTION_UP:
+                sendDownViewEvent(ev);
+                Log.d(TAG, "ACTION_UP");
+                break;
+        }
+        return super.onTouchEvent(ev);
+    }
+
+    private void actionMove(MotionEvent event) {
+        float currentX = event.getX();
+        float currentY = event.getY();
+        float OffsetX =mDownXValue - currentX;
+        float OffsetY =mDownYValue-currentY;
+        Log.d(TAG, "Offset Y: "+OffsetY);
+        if (Math.abs(OffsetX) > Math.abs(OffsetY)) {
+            sendDownViewEvent(event);
+        }else if(Math.abs(OffsetY)>100){
+            Log.d(TAG, "Offset Y, SUCCESS!!: "+OffsetY);
+            sendDownViewEvent(MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
+        }
+    }
+
+    private void sendDownViewEvent(MotionEvent ev) {
+        if(mDownView!=null) {
+            mDownView.onTouchEvent(ev);
+        }
+    }
+
+    private View findChildTouched(MotionEvent event) {
+        View downView = null;
+        mChildCount = getChildCount();
+        mListViewCoords = new int[2];
+        getLocationOnScreen(mListViewCoords);
+        int x = (int) event.getRawX() - mListViewCoords[0];
+        int y = (int) event.getRawY() - mListViewCoords[1];
+        View child;
+        for (int i = 0; i < mChildCount; i++) {
+            child = getChildAt(i);
+            child.getHitRect(mRect);
+            if (mRect.contains(x, y)) {
+                downView=child;
+                return downView;
+            }
+        }
+        return downView;
+    }
+
     private OnScrollListener mScrollListener = new OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
             if (scrollState == SCROLL_STATE_IDLE) {
-                    updateChildrenControlPoints(0);
+                updateChildrenControlPoints(0);
             }
         }
 
@@ -123,7 +175,7 @@ public class FlabbyListView extends ListView {
         FlabbyLayout flabbyChild;
         for (int i = 0; i <= getLastVisiblePosition() - getFirstVisiblePosition(); i++) {
             child = getChildAt(i);
-            if(child instanceof FlabbyLayout) {
+            if (child instanceof FlabbyLayout) {
                 flabbyChild = (FlabbyLayout) child;
                 if (child != null) {
                     flabbyChild.updateControlPoints(deltaY);

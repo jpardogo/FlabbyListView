@@ -3,6 +3,7 @@ package com.jpardogo.android.flabbylistview;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,7 +21,7 @@ import butterknife.InjectView;
 /**
  * Created by jpardogo on 22/03/2014.
  */
-public class ListAdapter extends ArrayAdapter<String> {
+public class ListAdapter extends ArrayAdapter<String>{
     private Context mContext;
     private List<String> mItems;
     private Random mRandomizer = new Random();
