@@ -71,26 +71,18 @@ public class FlabbyLayout extends FrameLayout {
             finishX1 = mFourFifthWith;
             finishX2 = mOneFifthWidth;
             curvature = mCurvature;
+            topCellPath(startX1, startX2, -curvature);
+            bottomCellPath(finishX1, finishX2, mHeight - curvature);
         } else {
             startX1 = mFingerX;
-            startX2 = mFingerX;
-            finishX1 = mFingerX;
-            finishX2 = mFingerX;
-            curvature = -mCurvature;
+            startX2 = startX1;
+            finishX1 = startX1;
+            finishX2 = startX1;
+            curvature = isSelectedView?-mCurvature:mCurvature;
+            topCellPath(startX1,startX2,curvature);
+            curvature = isSelectedView?mHeight-curvature:mHeight;
+            bottomCellPath(finishX1,finishX2,curvature);
         }
-
-        if (isSelectedView || !isUserTouching) {
-            topCellPath(startX1, startX2, mCurvature);
-            bottomCellPath(finishX1, finishX2, curvature);
-        } else {
-            mPath.reset();
-            mPath.moveTo(0, 0);
-            mPath.cubicTo(mFingerX, mCurvature, mFingerX, mCurvature, mWidth, 0);
-            mPath.lineTo(mWidth, mHeight);
-            mPath.cubicTo(finishX1, mHeight, finishX2, mHeight, 0, mHeight);
-            mPath.lineTo(0, 0);
-        }
-
 
         canvas.drawPath(mPath, mPaint);
     }
@@ -98,13 +90,13 @@ public class FlabbyLayout extends FrameLayout {
     private Path topCellPath(float x1, float x2, float curvature) {
         mPath.reset();
         mPath.moveTo(0, 0);
-        mPath.cubicTo(x1, -mCurvature, x2, -mCurvature, mWidth, 0);
+        mPath.cubicTo(x1, curvature, x2, curvature, mWidth, 0);
         mPath.lineTo(mWidth, mHeight);
         return mPath;
     }
 
     private Path bottomCellPath(float x1, float x2, float curvature) {
-        mPath.cubicTo(x1, mHeight - curvature, x2, mHeight - curvature, 0, mHeight);
+        mPath.cubicTo(x1,  curvature, x2, curvature, 0, mHeight);
         mPath.lineTo(0, 0);
         return null;
     }

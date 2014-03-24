@@ -9,8 +9,8 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 public class FlabbyListView extends ListView {
-
     private static final String TAG = FlabbyListView.class.getSimpleName();
+    private static final float PIXELS_SCROLL_TO_CANCEL_EXPANSION=100;
     private View mTrackedChild;
     private FlabbyLayout mDownView;
     private FlabbyLayout mDownBelowView;
@@ -130,7 +130,7 @@ public class FlabbyListView extends ListView {
         if (Math.abs(OffsetX) > Math.abs(OffsetY)) {
             sendDownViewEvent(event);
             sendBelowDownViewEvent(event);
-        } else if (Math.abs(OffsetY) > 100) {
+        } else if (Math.abs(OffsetY) > PIXELS_SCROLL_TO_CANCEL_EXPANSION) {
             event = MotionEvent.obtain(System.currentTimeMillis(), System.currentTimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0);
             sendDownViewEvent(event);
             sendBelowDownViewEvent(event);
