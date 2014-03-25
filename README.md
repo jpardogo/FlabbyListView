@@ -69,6 +69,12 @@ dependencies {
 }
 ```
 
+Notes
+-----
+
+The iOS version developed by [brocoo][2] is available at [BRFlabbyTable][3]
+
+
 Developed By
 --------------------
 
@@ -104,3 +110,5 @@ License
     limitations under the License.
 
 [1]: https://www.youtube.com/watch?v=yN6oO4dBgW8
+[2]: https://github.com/brocoo
+[3]: https://github.com/brocoo/BRFlabbyTable
