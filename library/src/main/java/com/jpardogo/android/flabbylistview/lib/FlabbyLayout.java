@@ -51,37 +51,29 @@ public class FlabbyLayout extends FrameLayout {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mWidth = getWidth();
+        mHeight = getHeight();
+        mOneFifthWidth = mWidth / 5;
+        mFourFifthWith = mOneFifthWidth * 4;
+    }
+
+    @Override
     protected void onDraw(final Canvas canvas) {
-        if (mWidth == 0) mWidth = getWidth();
-        if (mHeight == 0) mHeight = getHeight();
         mRect = canvas.getClipBounds();
         mRect.inset(0, -mHeight / 2);
         canvas.clipRect(mRect, Region.Op.REPLACE);
-        float startX1;
-        float startX2;
-        float finishX1;
-        float finishX2;
-        float curvature;
+
         if (!isUserTouching) {
-            if (mDeltaY > -MAX_CURVATURE && mDeltaY < MAX_CURVATURE) mCurvature = mDeltaY * 2 * -1;
-            if (mOneFifthWidth == 0) mOneFifthWidth = mWidth / 5;
-            if (mFourFifthWith == 0) mFourFifthWith = mOneFifthWidth * 4;
-            startX1 = mOneFifthWidth;
-            startX2 = mFourFifthWith;
-            finishX1 = mFourFifthWith;
-            finishX2 = mOneFifthWidth;
-            curvature = mCurvature;
-            topCellPath(startX1, startX2, -curvature);
-            bottomCellPath(finishX1, finishX2, mHeight - curvature);
+            if (mDeltaY > -MAX_CURVATURE && mDeltaY < MAX_CURVATURE) mCurvature = mDeltaY * 2;
+            topCellPath(mOneFifthWidth, mFourFifthWith, mCurvature);
+            bottomCellPath(mFourFifthWith, mOneFifthWidth, mHeight + mCurvature);
         } else {
-            startX1 = mFingerX;
-            startX2 = startX1;
-            finishX1 = startX1;
-            finishX2 = startX1;
-            curvature = isSelectedView?-mCurvature:mCurvature;
-            topCellPath(startX1,startX2,curvature);
+            float curvature = isSelectedView?-mCurvature:mCurvature;
+            topCellPath(mFingerX,mFingerX,curvature);
             curvature = isSelectedView?mHeight-curvature:mHeight;
-            bottomCellPath(finishX1,finishX2,curvature);
+            bottomCellPath(mFingerX,mFingerX,curvature);
         }
 
         canvas.drawPath(mPath, mPaint);
