@@ -68,6 +68,8 @@ Including in your project
 
 You can either add the library to your application as a library project or add the following dependency to your build.gradle:
 
+![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jpardogo.flabbylistview/library/badge.svg)
+
 ```groovy
 dependencies {
     compile 'com.jpardogo.flabbylistview:library:(latest version)'
