@@ -1,6 +1,8 @@
 FlabbyListView
 ==============
 
+**This library is not maintained anymore and there will be no further releases**
+
 Android library to display a ListView which cells are not rigid but flabby and react to ListView scroll and touch events.
 
 A video example of this library is on this [youtube video][1].  
