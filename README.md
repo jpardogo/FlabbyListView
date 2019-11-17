@@ -73,7 +73,7 @@ You can either add the library to your application as a library project or add t
 
 ```groovy
 dependencies {
-    compile 'com.jpardogo.flabbylistview:library:(latest version)'
+    implementation 'com.jpardogo.flabbylistview:library:(latest version)'
 }
 ```
 
